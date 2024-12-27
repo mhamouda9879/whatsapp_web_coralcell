@@ -59,13 +59,21 @@ function Message(props: Pick<Inbox, "messageStatus" | "lastMessage">) {
 
   if (!lastMessage) return <></>;
 
+  const formatMessage = (message: string) => {
+    const MAX_LENGTH = 100; // Adjust the max length to fit two lines.
+    if (message.length > MAX_LENGTH) {
+      return message.substring(0, MAX_LENGTH) + "...";
+    }
+    return message;
+  };
+
   return (
     <>
       <MessageStatusIcon
         isRead={messageStatus === "READ"}
         id={messageStatus === "SENT" ? "singleTick" : "doubleTick"}
       />
-      <Subtitle>{lastMessage}</Subtitle>
+      <Subtitle>{formatMessage(lastMessage)}</Subtitle>
     </>
   );
 }

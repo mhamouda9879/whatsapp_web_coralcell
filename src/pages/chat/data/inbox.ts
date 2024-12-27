@@ -35,7 +35,7 @@ export class InboxService {
         name: item.wa_id || "Unknown",
         image: this.getImageURL(),
         lastMessage: item.last_message_body || "No messages yet",
-        notificationsCount: 0,
+        notificationsCount: item.is_live_agent_requested == 0 ? 0 : 10,
         messageStatus: item.last_message_direction === "outgoing" ? "SENT" : "RECEIVED",
         timestamp: item.last_message_timestamp || item.created_at || undefined,
         isPinned: false,
