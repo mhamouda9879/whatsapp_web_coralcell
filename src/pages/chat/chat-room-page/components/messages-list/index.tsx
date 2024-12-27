@@ -66,7 +66,7 @@ export default function MessagesList(props: MessagesListProps) {
     <Container ref={containerRef}>
       <EncryptionMessage>
         <Icon id="lock" className="icon" />
-        Messages are end-to-end encrypted. No one outside of this chat, not even WhatsApp, can read
+        Messages are end-to-end encrypted. No one outside of this chat, not even Coralcell, can read
         or listen to them. Click to learn more.
       </EncryptionMessage>
       <DateWrapper>

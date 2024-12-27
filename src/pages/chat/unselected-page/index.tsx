@@ -8,7 +8,7 @@ export default function UnSelectedChatPage() {
 
   const getImageURL = () => {
     if (theme.mode === "light") return "/assets/images/entry-image-light.webp";
-    return "/assets/images/entry-image-dark.png";
+    return "/assets/images/entry-image-dark.webp";
   };
 
   return (
@@ -17,10 +17,10 @@ export default function UnSelectedChatPage() {
         <ImageWrapper>
           <Image src={getImageURL()} />
         </ImageWrapper>
-        <Title> WhatsApp Web </Title>
+        <Title> Coralcell Chat </Title>
         <Text>
           Send and receive messages without keeping your phone online. <br />
-          Use WhatsApp on up to 4 linked devices and 1 phone at the same time.
+          Use Coralcell on up to 4 linked devices and 1 phone at the same time.
         </Text>
         <Text>
           <span>Built by</span>{" "}

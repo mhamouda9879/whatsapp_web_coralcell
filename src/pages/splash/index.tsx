@@ -22,7 +22,7 @@ export default function SplashPage(props: SplashPageProps) {
         <Logo id="whatsapp" />
       </LogoWrapper>
       <Progress progess={progress} />
-      <Title>WhatsApp</Title>
+      <Title>Coralcell</Title>
       <SubTitle>
         <EncryptionIcon id="lock" /> End-to-end encrypted. Built by{" "}
         <Link href="https://coralcell.com" target="_blank">
