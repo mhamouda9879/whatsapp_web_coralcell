@@ -5,16 +5,21 @@ import ChatProvider from "pages/chat/context/chat";
 const ChatPage = React.lazy(() => import("pages/chat/chat-room-page"));
 const UnSelectedChatPage = React.lazy(() => import("pages/chat/unselected-page"));
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      path: "/:id",
+      element: <ChatPage />,
+    },
+    {
+      path: "/",
+      element: <UnSelectedChatPage />,
+    },
+  ],
   {
-    path: "/:id",
-    element: <ChatPage />,
-  },
-  {
-    path: "/",
-    element: <UnSelectedChatPage />,
-  },
-]);
+    basename: "/f/whatsapp_web_coralcell/build",
+  }
+);
 
 export default function AppRoutes() {
   return (
