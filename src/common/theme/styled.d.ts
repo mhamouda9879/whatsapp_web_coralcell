@@ -44,6 +44,10 @@ declare module "styled-components" {
       readIconColor: string;
       unreadIconColor: string;
       headerIconColor: string;
+      liveAgentBackgroundColor: string; // Added new property for Live Agent background
+      robotBackgroundColor: string; // Added new property for Robot background
+      liveAgentBorderColor: string; // Added new property for Live Agent border
+      robotBorderColor: string; // Added new property for Robot border
     };
     alert: {
       infoColor: string;

@@ -10,6 +10,8 @@ export type Inbox = {
   notificationsCount?: number;
   isPinned?: boolean;
   isOnline?: boolean;
+  isRobot?: boolean;
+
 };
 
 export type Message = {

@@ -25,6 +25,9 @@ export default function ChatRoomPage() {
   } = useChatRoom();
   useNavigateToChat(activeInbox);
 
+  // Convert `boolean | 0` to `0 | 1`
+  const toggleState: 0 | 1 = activeInbox?.isRobot ? 1 : 0;
+
   return (
     <ChatLayout>
       <Container>
@@ -36,6 +39,7 @@ export default function ChatRoomPage() {
             subTitle={activeInbox?.isOnline ? "Online" : ""}
             onSearchClick={() => handleMenuOpen("search")}
             onProfileClick={() => handleMenuOpen("profile")}
+            toggleState={toggleState} // Pass the converted toggle state
           />
           <MessagesList
             onShowBottomIcon={handleShowIcon}
@@ -47,7 +51,9 @@ export default function ChatRoomPage() {
                 <Icon id="downArrow" />
               </ScrollButton>
             )}
-            <Footer />
+            <Footer
+              chatId={activeInbox?.name ?? ""}
+            />
           </FooterContainer>
         </Body>
         <Sidebar title="Search" isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)}>

@@ -44,6 +44,12 @@ export const lightTheme: DefaultTheme = {
     readIconColor: "#0da9e5",
     unreadIconColor: "#b3b3b3",
     headerIconColor: "rgb(145, 145, 145)",
+
+    // New styles for "Live Agent" and "Robot"
+    liveAgentBackgroundColor: "#d4f1f9", // Light blue
+    robotBackgroundColor: "#f8f9fa", // Light gray
+    liveAgentBorderColor: "#42cba5", // Teal
+    robotBorderColor: "#dadada", // Neutral gray
   },
   alert: {
     infoColor: "#9de1fe",

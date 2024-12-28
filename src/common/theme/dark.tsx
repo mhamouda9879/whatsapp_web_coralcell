@@ -44,6 +44,12 @@ export const darkTheme: DefaultTheme = {
     readIconColor: "#0da9e5",
     unreadIconColor: "#b3b3b3",
     headerIconColor: "rgb(145, 145, 145)",
+
+    // New styles for "Live Agent" and "Robot"
+    liveAgentBackgroundColor: "#1a3c4b", // Dark blue-green
+    robotBackgroundColor: "#242f36", // Dark gray
+    liveAgentBorderColor: "#0da9e5", // Bright blue
+    robotBorderColor: "#3C4247", // Neutral gray
   },
   alert: {
     infoColor: "#085373",
