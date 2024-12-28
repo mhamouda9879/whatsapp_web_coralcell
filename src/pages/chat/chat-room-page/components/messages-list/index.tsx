@@ -26,7 +26,8 @@ export default function MessagesList(props: MessagesListProps) {
   const { id: contactId } = useParams<{ id: string }>();
 
   const [messages, setMessages] = useState<Message[]>([]);
-  const { containerRef, lastMessageRef } = useScrollToBottom(
+  const [isUserScrolling, setIsUserScrolling] = useState(false);
+  const { containerRef, lastMessageRef, resetManualScroll } = useScrollToBottom(
     onShowBottomIcon,
     shouldScrollToBottom,
     contactId
@@ -42,15 +43,17 @@ export default function MessagesList(props: MessagesListProps) {
       setMessages((prevMessages) => {
         // Only update if new messages are different
         if (JSON.stringify(prevMessages) !== JSON.stringify(newMessages)) {
+          // Reset manual scrolling if the user hasn't interacted with the scroll
+          if (!isUserScrolling) {
+            resetManualScroll();
+            setTimeout(() => {
+              lastMessageRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+            }, 100); // Small delay ensures DOM rendering
+          }
           return newMessages;
         }
         return prevMessages;
       });
-
-      // Scroll to the last message after updating messages
-      setTimeout(() => {
-        lastMessageRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
-      }, 100); // Small delay ensures DOM rendering
     };
 
     // Start polling the API every second
@@ -60,7 +63,27 @@ export default function MessagesList(props: MessagesListProps) {
     return () => {
       messageService.stopPollingMessages();
     };
-  }, [contactId, lastMessageRef]);
+  }, [contactId, lastMessageRef, isUserScrolling, resetManualScroll]);
+
+  useEffect(() => {
+    const ref = containerRef.current;
+    if (!ref) return;
+
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = ref;
+      const isAtBottom = scrollHeight - scrollTop <= clientHeight + 50;
+
+      if (!isAtBottom) {
+        setIsUserScrolling(true);
+      } else {
+        setIsUserScrolling(false);
+      }
+    };
+
+    ref.addEventListener("scroll", handleScroll);
+
+    return () => ref.removeEventListener("scroll", handleScroll);
+  }, [containerRef]);
 
   return (
     <Container ref={containerRef}>

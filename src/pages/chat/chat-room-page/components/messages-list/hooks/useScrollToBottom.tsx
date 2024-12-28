@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function useScrollToBottom(
   callback: Function,
@@ -7,13 +7,13 @@ export default function useScrollToBottom(
 ) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const lastMessageRef = useRef<HTMLDivElement | null>(null);
+  const [hasScrolledManually, setHasScrolledManually] = useState(false);
 
   useEffect(() => {
-    if (lastMessageRef.current && shouldScrollToBottom) {
-
+    if (lastMessageRef.current && shouldScrollToBottom && !hasScrolledManually) {
       lastMessageRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
     }
-  }, [shouldScrollToBottom, chatId]);
+  }, [shouldScrollToBottom, chatId, hasScrolledManually]);
 
   useEffect(() => {
     const ref = containerRef.current;
@@ -23,6 +23,10 @@ export default function useScrollToBottom(
       const { scrollTop, scrollHeight, clientHeight } = ref;
       const isScrolledToBottom = scrollHeight - scrollTop <= clientHeight + 50;
 
+      if (!isScrolledToBottom) {
+        setHasScrolledManually(true);
+      }
+
       callback(!isScrolledToBottom);
     };
 
@@ -31,5 +35,21 @@ export default function useScrollToBottom(
     return () => ref.removeEventListener("scroll", handleScroll);
   }, [containerRef, callback]);
 
-  return { containerRef, lastMessageRef };
+  useEffect(() => {
+    if (shouldScrollToBottom && !hasScrolledManually && containerRef.current) {
+      const ref = containerRef.current;
+      const { scrollTop, scrollHeight, clientHeight } = ref;
+      const isAtBottom = scrollHeight - scrollTop <= clientHeight + 50;
+
+      if (!isAtBottom && !hasScrolledManually) {
+        ref.scrollTop = scrollHeight - clientHeight;
+      }
+    }
+  }, [shouldScrollToBottom, hasScrolledManually]);
+
+  const resetManualScroll = () => {
+    setHasScrolledManually(false);
+  };
+
+  return { containerRef, lastMessageRef, resetManualScroll };
 }
