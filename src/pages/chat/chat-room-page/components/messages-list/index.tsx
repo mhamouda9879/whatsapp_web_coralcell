@@ -113,9 +113,10 @@ const SingleMessage = React.forwardRef<HTMLDivElement, { message: Message }>((pr
   const { message } = props;
 
   const [time, setTime] = React.useState("");
+
   React.useEffect(() => {
     if (message.timestamp) {
-      const [hoursStr, minutes, seconds] = message.timestamp.split(":");
+      const [hoursStr, minutes] = message.timestamp.split(":");
       let hours = parseInt(hoursStr, 10);
       if (isNaN(hours)) {
         setTime("Invalid Time");
@@ -126,6 +127,18 @@ const SingleMessage = React.forwardRef<HTMLDivElement, { message: Message }>((pr
       setTime(`${hours}:${minutes} ${period}`);
     }
   }, [message.timestamp]);
+
+  // Function to convert text between ** into bold
+  const formatMessage = (text: string) => {
+    if (!text) return text;
+
+    // Replace any text between asterisks (*) with <span> having bold and increased font size
+    return text.replace(
+      /\*(.*?)\*/g,
+      (_, match) => `<span style="font-weight: bold; font-size: 1em;">${match}</span>`
+    );
+  };
+
   return (
     <ChatMessage
       key={message.id}
@@ -133,9 +146,12 @@ const SingleMessage = React.forwardRef<HTMLDivElement, { message: Message }>((pr
       ref={ref}
       style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}
     >
-      <span style={{ textAlign: "right", padding: "0em 1em 0.7em 1em" }}>{message.body}</span>
+      <span
+        style={{ textAlign: "right", padding: "0em 1em 0.7em 1em" }}
+        dangerouslySetInnerHTML={{ __html: formatMessage(message.body) }}
+      ></span>
       <ChatMessageFiller />
-      <ChatMessageFooter style={{ marginTop: "0.5em" }}> {/* Adjusted margin for better spacing */}
+      <ChatMessageFooter style={{ marginTop: "0.5em" }}>
         <span>{time}</span>
         {!message.isOpponent && (
           <Icon
