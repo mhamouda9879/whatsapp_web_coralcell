@@ -5,12 +5,12 @@ export default function useScrollToBottom(
   shouldScrollToBottom?: boolean,
   chatId?: string
 ) {
-  const containerRef = useRef<HTMLDivElement | null>(null); // Properly type containerRef
-  const lastMessageRef = useRef<HTMLDivElement | null>(null); // Properly type lastMessageRef
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const lastMessageRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (lastMessageRef.current && shouldScrollToBottom) {
-      // Scroll to the last message
+
       lastMessageRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
     }
   }, [shouldScrollToBottom, chatId]);
