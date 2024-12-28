@@ -1,5 +1,6 @@
 import Icon from "common/components/icons";
 import { Inbox } from "common/types/common.type";
+import { format, isToday, isYesterday, isThisWeek } from "date-fns";
 import {
   Avatar,
   AvatarWrapper,
@@ -21,6 +22,8 @@ type InboxContactProps = {
   isActive?: boolean;
 };
 
+
+
 export default function InboxContact(props: InboxContactProps) {
   const { onChangeChat, isActive } = props;
   const { name, lastMessage, image, timestamp } = props.inbox;
@@ -28,6 +31,19 @@ export default function InboxContact(props: InboxContactProps) {
   const handleChangeChat = () => {
     if (onChangeChat) {
       onChangeChat(props.inbox);
+    }
+  };
+
+  const formatTimestamp = (timestamp: string) => {
+    const date = new Date(timestamp);
+    if (isToday(date)) {
+      return "Today";
+    } else if (isYesterday(date)) {
+      return "Yesterday";
+    } else if (isThisWeek(date)) {
+      return format(date, "EEEE"); // Day name (e.g., Monday, Tuesday)
+    } else {
+      return format(date, "dd/MM/yyyy"); // Default to date format
     }
   };
 
@@ -39,7 +55,7 @@ export default function InboxContact(props: InboxContactProps) {
       <Content>
         <TopContent>
           <Name>{name}</Name>
-          {timestamp && lastMessage ? <Time>{timestamp}</Time> : <Trailing {...props.inbox} />}
+          {timestamp && lastMessage ? <Time>{formatTimestamp(timestamp)}</Time> : <Trailing {...props.inbox} />}
         </TopContent>
 
         <BottomContent>

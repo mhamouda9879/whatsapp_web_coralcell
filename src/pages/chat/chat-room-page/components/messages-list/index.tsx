@@ -111,6 +111,23 @@ export default function MessagesList(props: MessagesListProps) {
 const SingleMessage = React.forwardRef<HTMLDivElement, { message: Message }>((props, ref) => {
   const { message } = props;
 
+
+  const [time, setTime] = React.useState("");
+
+  React.useEffect(() => {
+    if (message.timestamp) {
+      const [hoursStr, minutes, seconds] = message.timestamp.split(":");
+      let hours = parseInt(hoursStr, 10);
+      if (isNaN(hours)) {
+        setTime("Invalid Time");
+        return;
+      }
+      const period = hours >= 12 ? "PM" : "AM";
+      hours = hours % 12 || 12; 
+      setTime(`${hours}:${minutes} ${period}`); 
+    }
+  }, [message.timestamp]);
+
   return (
     <ChatMessage
       key={message.id}
@@ -120,16 +137,43 @@ const SingleMessage = React.forwardRef<HTMLDivElement, { message: Message }>((pr
       <span>{message.body}</span>
       <ChatMessageFiller />
       <ChatMessageFooter>
-        <span>{message.timestamp}</span>
+        <span>{time}</span>
         {!message.isOpponent && (
           <Icon
             id={`${message.messageStatus === "SENT" ? "singleTick" : "doubleTick"}`}
-            className={`chat__msg-status-icon ${
-              message.messageStatus === "READ" ? "chat__msg-status-icon--blue" : ""
-            }`}
+            className={`chat__msg-status-icon ${message.messageStatus === "READ" ? "chat__msg-status-icon--blue" : ""
+              }`}
           />
         )}
       </ChatMessageFooter>
     </ChatMessage>
   );
 });
+
+
+// const SingleMessage = React.forwardRef<HTMLDivElement, { message: Message }>((props, ref) => {
+//   const { message } = props;
+
+//   return (
+//     <ChatMessage
+//       key={message.id}
+//       className={message.isOpponent ? "chat__msg--received" : "chat__msg--sent"}
+//       ref={ref}
+//       style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }} // Ensures proper alignment
+//     >
+//       <span style={{ textAlign: "right", padding: "0.5em 1em" }}>{message.body}</span>
+//       <ChatMessageFiller />
+//       <ChatMessageFooter style={{ marginTop: "0.5em" }}> {/* Adjusted margin for better spacing */}
+//         <span>{message.timestamp}</span>
+//         {!message.isOpponent && (
+//           <Icon
+//             id={`${message.messageStatus === "SENT" ? "singleTick" : "doubleTick"}`}
+//             className={`chat__msg-status-icon ${
+//               message.messageStatus === "READ" ? "chat__msg-status-icon--blue" : ""
+//             }`}
+//           />
+//         )}
+//       </ChatMessageFooter>
+//     </ChatMessage>
+//   );
+// });
