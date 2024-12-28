@@ -72,6 +72,12 @@ export default function Footer({ chatId }) {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSend();
+    }
+  };
+
   return (
     <Wrapper>
       <IconsWrapper>
@@ -90,6 +96,7 @@ export default function Footer({ chatId }) {
         placeholder="Type a message here .."
         value={message}
         onChange={(e) => setMessage(e.target.value)}
+        onKeyDown={handleKeyDown}
       />
       <SendMessageButton onClick={handleSend}>
         <Icon id="send" className="icon" />
