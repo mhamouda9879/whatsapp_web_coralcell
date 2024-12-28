@@ -20,8 +20,9 @@ type HeaderProps = {
   onProfileClick: () => void;
   title: string;
   image: string;
-  subTitle?: string; // Subtitle is optional
-  toggleState: 0 | 1; // 0 for Robot, 1 for Live Agent (Required parameter)
+  subTitle?: string;
+  toggleState: 0 | 1;
+  waId: string; // WhatsApp ID for API payload
 };
 
 export default function Header({
@@ -31,19 +32,39 @@ export default function Header({
   image,
   subTitle = "",
   toggleState,
+  waId,
 }: HeaderProps) {
   const [isLiveAgent, setIsLiveAgent] = useState<boolean>(toggleState === 1);
 
   useEffect(() => {
-    // Update state if the `toggleState` prop changes
     setIsLiveAgent(toggleState === 1);
   }, [toggleState]);
 
-  const handleToggle = () => {
-    const newToggleState = !isLiveAgent;
-    setIsLiveAgent(newToggleState);
-    console.log(`Switched to: ${newToggleState ? "Live Agent" : "Robot"} mode`);
-    // Add any additional logic here, such as API calls
+  const handleToggle = async () => {
+    const newToggleState = isLiveAgent ? 0 : 1;
+    setIsLiveAgent(!isLiveAgent);
+
+    try {
+      const response = await fetch("https://route.coralcell.com/b/api/update_is_live_agent.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          wa_id: waId,
+          is_live_agent_requested: newToggleState,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      console.log("API Response:", result);
+    } catch (error) {
+      console.error("Error updating toggle state:", error);
+    }
   };
 
   return (

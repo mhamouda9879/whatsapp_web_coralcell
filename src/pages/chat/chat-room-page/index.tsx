@@ -39,7 +39,8 @@ export default function ChatRoomPage() {
             subTitle={activeInbox?.isOnline ? "Online" : ""}
             onSearchClick={() => handleMenuOpen("search")}
             onProfileClick={() => handleMenuOpen("profile")}
-            toggleState={toggleState} // Pass the converted toggle state
+            toggleState={toggleState}
+            waId={activeInbox?.name ?? ""} 
           />
           <MessagesList
             onShowBottomIcon={handleShowIcon}
