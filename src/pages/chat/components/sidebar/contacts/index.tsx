@@ -76,7 +76,7 @@ function Message(props: Pick<Inbox, "messageStatus" | "lastMessage">) {
   if (!lastMessage) return <></>;
 
   const formatMessage = (message: string) => {
-    const MAX_LENGTH = 100;
+    const MAX_LENGTH = 70;
     if (message.length > MAX_LENGTH) {
       return message.substring(0, MAX_LENGTH) + "...";
     }

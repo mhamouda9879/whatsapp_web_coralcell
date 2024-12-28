@@ -108,35 +108,50 @@ export default function MessagesList(props: MessagesListProps) {
   );
 }
 
+
 const SingleMessage = React.forwardRef<HTMLDivElement, { message: Message }>((props, ref) => {
   const { message } = props;
-
 
   const [time, setTime] = React.useState("");
 
   React.useEffect(() => {
     if (message.timestamp) {
-      const [hoursStr, minutes, seconds] = message.timestamp.split(":");
+      const [hoursStr, minutes] = message.timestamp.split(":");
       let hours = parseInt(hoursStr, 10);
       if (isNaN(hours)) {
         setTime("Invalid Time");
         return;
       }
       const period = hours >= 12 ? "PM" : "AM";
-      hours = hours % 12 || 12; 
-      setTime(`${hours}:${minutes} ${period}`); 
+      hours = hours % 12 || 12;
+      setTime(`${hours}:${minutes} ${period}`);
     }
   }, [message.timestamp]);
+
+  // Function to convert text between ** into bold
+  const formatMessage = (text: string) => {
+    if (!text) return text;
+
+    // Replace any text between asterisks (*) with <span> having bold and increased font size
+    return text.replace(
+      /\*(.*?)\*/g,
+      (_, match) => `<span style="font-weight: bold; font-size: 1em;">${match}</span>`
+    );
+  };
 
   return (
     <ChatMessage
       key={message.id}
       className={message.isOpponent ? "chat__msg--received" : "chat__msg--sent"}
       ref={ref}
+      style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}
     >
-      <span>{message.body}</span>
+      <span
+        style={{ textAlign: "right", padding: "0em 1em 0.7em 1em" }}
+        dangerouslySetInnerHTML={{ __html: formatMessage(message.body) }}
+      ></span>
       <ChatMessageFiller />
-      <ChatMessageFooter>
+      <ChatMessageFooter style={{ marginTop: "0.5em" }}>
         <span>{time}</span>
         {!message.isOpponent && (
           <Icon
@@ -149,31 +164,3 @@ const SingleMessage = React.forwardRef<HTMLDivElement, { message: Message }>((pr
     </ChatMessage>
   );
 });
-
-
-// const SingleMessage = React.forwardRef<HTMLDivElement, { message: Message }>((props, ref) => {
-//   const { message } = props;
-
-//   return (
-//     <ChatMessage
-//       key={message.id}
-//       className={message.isOpponent ? "chat__msg--received" : "chat__msg--sent"}
-//       ref={ref}
-//       style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }} // Ensures proper alignment
-//     >
-//       <span style={{ textAlign: "right", padding: "0.5em 1em" }}>{message.body}</span>
-//       <ChatMessageFiller />
-//       <ChatMessageFooter style={{ marginTop: "0.5em" }}> {/* Adjusted margin for better spacing */}
-//         <span>{message.timestamp}</span>
-//         {!message.isOpponent && (
-//           <Icon
-//             id={`${message.messageStatus === "SENT" ? "singleTick" : "doubleTick"}`}
-//             className={`chat__msg-status-icon ${
-//               message.messageStatus === "READ" ? "chat__msg-status-icon--blue" : ""
-//             }`}
-//           />
-//         )}
-//       </ChatMessageFooter>
-//     </ChatMessage>
-//   );
-// });
