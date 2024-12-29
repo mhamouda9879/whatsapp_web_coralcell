@@ -37,7 +37,7 @@ export default function Sidebar() {
     <SidebarContainer>
       <Header>
         <ImageWrapper>
-          <Avatar src="/assets/images/profile.webp" />
+          <Avatar src={`${process.env.PUBLIC_URL}/assets/images/profile.webp`} />
         </ImageWrapper>
         <Actions>
           <ThemeIconContainer onClick={handleChangeThemeMode}>

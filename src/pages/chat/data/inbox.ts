@@ -12,10 +12,12 @@ export class InboxService {
   theme = useAppTheme();
 
   getImageURL = (): string => {
+    const baseUrl = process.env.PUBLIC_URL || "";
     return this.theme.mode === "light"
-      ? "/assets/images/coralcell_light.png"
-      : "/assets/images/coralcell_dark.png";
+      ? `${baseUrl}/assets/images/coralcell_light.png`
+      : `${baseUrl}/assets/images/coralcell_dark.png`;
   };
+  
 
   async fetchInboxData(): Promise<Inbox[]> {
     try {

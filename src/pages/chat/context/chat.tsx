@@ -15,7 +15,10 @@ type ChatContextProp = {
 };
 
 const initialValue: ChatContextProp = {
-  user: { name: "Coralcell Limited", image: "/assets/images/girl.jpeg" },
+  user: {
+    name: "Coralcell Limited",
+    image: `${process.env.PUBLIC_URL}/assets/images/girl.jpeg`,
+  },
   inbox: [], // Start with an empty array for inbox
   onChangeChat() {
     throw new Error("Function not implemented");
